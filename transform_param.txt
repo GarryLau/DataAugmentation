@@ -1,0 +1,29 @@
+  transform_param {
+    scale: 0.017                                    #1 scale是指对图像像素值的变化
+    mirror: true                                    #2 镜像
+    crop_size: 224                                  #3 裁剪
+    mean_file: "train_mean.binaryproto"             #4 均值文件，不能与#5同时用
+    #mean_value: 104                                #5 均值，不能与#4同时用
+    #mean_value: 117
+    #mean_value: 123
+    #force_color: false                             #6 强制为彩色图
+    #force_gray: false                              #7 强制为灰度图
+
+    # Begin Added by liugan5 for Image augmentation
+    apply_probability: 0.5                          #8 是否做smooth、brightness、color_shift是概率性事件
+    smooth_filtering: true                          #9 是否模糊处理                                             （随机）
+    max_smooth: 6                                   #10 模糊处理参数                                            （随机）
+    max_rotation_angle: 359                         #11 旋转角度，（也用作仿射变换的旋转角度）                  （随机）
+    contrast_brightness_adjustment: true            #12 是否调节contrast、brightness                            （随机）
+    min_contrast: 0.8                               #13 调节contrast、brightness用                              （随机）
+    max_contrast: 1.2                               #14 调节contrast、brightness用                              （随机）
+    max_brightness_shift: 20                        #15 调节contrast、brightness用                              （随机）
+    max_color_shift: 20                             #16 颜色偏移                                                （随机）
+    min_side_min: 256                               #17 对图像做缩放并随机裁剪时用，与#18同时用，不能与#19同时用（随机）
+    min_side_max: 480                               #18 对图像做缩放并随机裁剪时用，与#17同时用，不能与#19同时用（随机）
+    #min_side: 200                                  #19 将图像裁剪到min_side大小，不能与#17，#18同时用          （随机）
+    affine_min_scale: 0.8                           #20 仿射变换缩放尺度最小值                                  （随机）
+    affine_max_scale: 1.2                           #21 仿射变换缩放尺度最大值                                  （随机）
+    debug_params: false                             #22 调试看数据增加是否正确时用
+    # End Added by liugan5 for Image augmentation
+  }
