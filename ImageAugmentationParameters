@@ -17,7 +17,7 @@ transform_param {
     apply_probability: 0.5                          #8 是否做#9—#24的变换是概率性事件
     smooth_filtering: true                          #9 是否模糊处理                                             （随机）
     max_smooth: 6                                   #10 模糊处理参数                                            （随机）
-    max_rotation_angle: 30                           #11 旋转角度，（也用作仿射变换的旋转角度）                   （随机）
+    max_rotation_angle: 30                          #11 旋转角度，（也用作仿射变换的旋转角度）                    （随机）
     contrast_brightness_adjustment: true            #12 是否调节contrast、brightness                            （随机）
     min_contrast: 0.8                               #13 调节contrast、brightness用                              （随机）
     max_contrast: 1.2                               #14 调节contrast、brightness用                              （随机）
@@ -26,8 +26,8 @@ transform_param {
     min_side_min: 224                               #17 对图像做缩放并随机裁剪时用，与#18同时用，不能与#19同时用    （随机）
     min_side_max: 288                               #18 对图像做缩放并随机裁剪时用，与#17同时用，不能与#19同时用    （随机）
     #min_side: 200                                  #19 将图像裁剪到min_side大小，不能与#17，#18同时用            （随机）
-    affine_min_scale: 0.8                            #20 仿射变换缩放尺度最小值                                  （随机）
-    affine_max_scale: 1.2                            #21 仿射变换缩放尺度最大值                                  （随机）
+    affine_min_scale: 0.8                           #20 仿射变换缩放尺度最小值                                   （随机）
+    affine_max_scale: 1.2                           #21 仿射变换缩放尺度最大值                                   （随机）
     random_erasing_low: 0.02                        #22 随机擦除概率最小值                                       （随机）
     random_erasing_high: 0.2                        #23 随机擦除概率最大值                                       （随机）
     random_erasing_ratio: 0.3                       #24 用来确定随机擦除面积的比例的参数                          （随机）
