@@ -1,0 +1,76 @@
+针对利用原始图像作为数据源进行训练的训练方式所做的数据增强，主要是对cv::Mat做几何、颜色变换，在train_val.prototxt中在transform_param字段中对这些参数进行配置。
+目前transform_param中的参数总共有25个，其中#1—#7是原版caffe自带的，#8—#25是开发的（#25用作调试用，不用做对图像的变换）。
+
+25个参数列表：  
+transform_param {
+    scale: 0.00390625                               #1 灰度值由[0,255]归一化到[0,1] scale是指对图像像素值的变换
+    mirror: true                                    #2 镜像
+    crop_size: 224                                  #3 裁剪
+    mean_file: "train_mean.binaryproto"             #4 均值文件，不能与#5同时用
+    #mean_value: 104                                #5 均值，不能与#4同时用
+    #mean_value: 117
+    #mean_value: 123
+    #force_color: false                             #6 强制为彩色图
+    #force_gray: false                              #7 强制为灰度图
+
+    # Begin Added by liugan5 for Image augmentation
+    apply_probability: 0.5                          #8 是否做#9—#24的变换是概率性事件
+    smooth_filtering: true                          #9 是否模糊处理                                             （随机）
+    max_smooth: 6                                   #10 模糊处理参数                                            （随机）
+    max_rotation_angle: 30                           #11 旋转角度，（也用作仿射变换的旋转角度）                   （随机）
+    contrast_brightness_adjustment: true            #12 是否调节contrast、brightness                            （随机）
+    min_contrast: 0.8                               #13 调节contrast、brightness用                              （随机）
+    max_contrast: 1.2                               #14 调节contrast、brightness用                              （随机）
+    max_brightness_shift: 20                        #15 调节contrast、brightness用                              （随机）
+    max_color_shift: 20                             #16 颜色偏移                                                （随机）
+    min_side_min: 224                               #17 对图像做缩放并随机裁剪时用，与#18同时用，不能与#19同时用    （随机）
+    min_side_max: 288                               #18 对图像做缩放并随机裁剪时用，与#17同时用，不能与#19同时用    （随机）
+    #min_side: 200                                  #19 将图像裁剪到min_side大小，不能与#17，#18同时用            （随机）
+    affine_min_scale: 0.8                            #20 仿射变换缩放尺度最小值                                  （随机）
+    affine_max_scale: 1.2                            #21 仿射变换缩放尺度最大值                                  （随机）
+    random_erasing_low: 0.02                        #22 随机擦除概率最小值                                       （随机）
+    random_erasing_high: 0.2                        #23 随机擦除概率最大值                                       （随机）
+    random_erasing_ratio: 0.3                       #24 用来确定随机擦除面积的比例的参数                          （随机）
+    debug_params: false                             #25 调试看数据增加是否正确时用
+    # End Added by liugan5 for Image augmentation
+  }
+
+#8—#25参数说明：
+概率：
+#8：apply_probability，用来和代码内部每次训练随机产生的概率相比较，用来确定该次训练是否需要对图像进行#9—#24的变换
+
+模糊处理：同时满足smooth_filtering: true和max_smooth > 6
+#9：smooth_filtering: 是否要做模糊处理
+#10：max_smooth，模糊处理参数
+
+旋转操作（不会与仿射变换同时进行）：满足max_rotation_angle > 0
+#11：max_rotation_angle，旋转角度，（也用作仿射变换的旋转角度）
+
+亮度、对比度操作：同时满足contrast_brightness_adjustment: true、min_contrast > 0、
+                                                         max_contrast >= min_contrast、 max_brightness_shift >= 0
+#12：contrast_brightness_adjustment，是否要做亮度、对比度变换
+#13：min_contrast，亮度、对比度参数                               
+#14：max_contrast，亮度、对比度参数
+#15：max_brightness_shift，亮度、对比度参数
+
+颜色偏移：满足max_color_shift > 0
+#16：max_color_shift，颜色偏移参数
+
+裁剪操作：两种方式，但是两种方式的参数不可同时配置，类似#4与#5的关系。两种方式的差别，第一种方式图像每次裁剪之后的大小是随机的，第二种方式图像每次被裁剪到固定大小（且设置的固定大小要比输入图像小，否则会出错）。
+方式一，同时满足min_side_min > 0、min_side_max > min_side_min
+方式二，满足min_side > 0
+#17：min_side_min，图像裁剪参数，裁剪之后的图像比min_side_min大，比min_side_max小
+#18：min_side_max
+#19：min_side，图像裁剪参数，裁剪之后的大小为min_side
+
+仿射变换（不会与旋转操作同时进行）：同时满足affine_min_scale > 0、affine_max_scale > affine_min_scale
+#20：affine_min_scale，仿射变换中的缩放参数，实际缩放的尺度比ffine_min_scale大，比affine_max_scale小
+#21：affine_max_scale
+
+随机擦除：同时满足random_erasing_ratio > 0、random_erasing_high > random_erasing_low、param_.random_erasing_low > 0
+#22：random_erasing_low，随机擦除的面积比例，实际擦除的面积比例比random_erasing_low大，比random_erasing_high小
+#23：random_erasing_high
+#24：random_erasing_ratio，用来确定随机擦除的矩形区域的宽、高
+
+调试：满足debug_params: true
+#25：debug_params，调试看图像增强参数
