@@ -86,14 +86,14 @@ void DataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
     read_time += timer.MicroSeconds();
     timer.Start();
 
-	/* Begin Added by liugan5, for lmdb data augmentation, 2017.12.11 */
+	/* Begin Added by garylau, for lmdb data augmentation, 2017.12.11 */
 	int imgH = datum.height();
 	int imgW = datum.width();
 	cv::Mat cv_img(imgH, imgW, CV_8UC3);
 	this->data_transformer_->DatumToMat(&datum, cv_img);
 	this->data_transformer_->CVMatTransform(cv_img);
 	this->data_transformer_->MatToDatum(cv_img, &datum);
-	/* End Added by liugan5, for lmdb data augmentation, 2017.12.11 */
+	/* End Added by garylau, for lmdb data augmentation, 2017.12.11 */
 
     // Apply data transformations (mirror, scale, crop...)
     int offset = batch->data_.offset(item_id);
