@@ -1,12 +1,12 @@
 #ifdef USE_OPENCV
 #include <opencv2/core/core.hpp>
-/* Begin Added by liugan5, for data augmentation, 2017.11.22 */
+/* Begin Added by garylau, for data augmentation, 2017.11.22 */
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/opencv.hpp>
-/* End Added by liugan5, for data augmentation, 2017.11.22 */
+/* End Added by garylau, for data augmentation, 2017.11.22 */
 #endif  // USE_OPENCV
 
 #include <string>
@@ -16,10 +16,10 @@
 #include "caffe/util/io.hpp"
 #include "caffe/util/math_functions.hpp"
 #include "caffe/util/rng.hpp"
-/* Begin Added by liugan5, for data augmentation, 2017.11.22 */
+/* Begin Added by garylau, for data augmentation, 2017.11.22 */
 #include <math.h>
 #define PI 3.14159265358979323846
-/* End Added by liugan5, for data augmentation, 2017.11.22 */
+/* End Added by garylau, for data augmentation, 2017.11.22 */
 
 namespace caffe {
 
@@ -47,7 +47,7 @@ DataTransformer<Dtype>::DataTransformer(const TransformationParameter& param,
       mean_values_.push_back(param_.mean_value(c));
     }
   }
-		/* Begin Added by liugan5, for data augmentation, 2017.11.30 */
+		/* Begin Added by garylau, for data augmentation, 2017.11.30 */
 		// check if we want to use min_side
 		if (param_.min_side())
 		{
@@ -60,10 +60,10 @@ DataTransformer<Dtype>::DataTransformer(const TransformationParameter& param,
 			CHECK_EQ(param_.min_side(), 0) << "Cannot specify min_side_min & min_side_max and min_side at the same time";
 			CHECK_GE(param_.min_side_max(), param_.min_side_min()) << "min_side_max must be greater than (or equals to) min_side_min";
 		}
-		/* End Added by liugan5, for data augmentation, 2017.11.30 */
+		/* End Added by garylau, for data augmentation, 2017.11.30 */
 	}
 
-	/* 被读取lmdb图片的Transform调用的Transform, liugan5 */
+	/* 被读取lmdb图片的Transform调用的Transform, garylau */
 template<typename Dtype>
 void DataTransformer<Dtype>::Transform(const Datum& datum,
                                        Dtype* transformed_data) {
@@ -152,7 +152,7 @@ void DataTransformer<Dtype>::Transform(const Datum& datum,
   }
 }
 
-	/* 读取lmdb图片所用到的Transform, liugan5 */
+	/* 读取lmdb图片所用到的Transform, garylau */
 template<typename Dtype>
 void DataTransformer<Dtype>::Transform(const Datum& datum,
                                        Blob<Dtype>* transformed_blob) {
@@ -248,7 +248,7 @@ void DataTransformer<Dtype>::Transform(const vector<cv::Mat> & mat_vector,
   }
 }
 
-    /* Begin Added by liugan5, for data augmentation, 2017.11.22 */
+    /* Begin Added by garylau, for data augmentation, 2017.11.22 */
 	void rotate(cv::Mat& src, int angle)
 	{
 		// get rotation matrix for rotating the image around its center
@@ -307,9 +307,9 @@ void DataTransformer<Dtype>::Transform(const vector<cv::Mat> & mat_vector,
 		}
 		cv::resize(cv_img, cv_img, dsize);
 	}
-    /* End Added by liugan5, for data augmentation, 2017.11.22 */
+    /* End Added by garylau, for data augmentation, 2017.11.22 */
 
-	/* 读取原始图片所用到的Transform, liugan5 */
+	/* 读取原始图片所用到的Transform, garylau */
 	template<typename Dtype>
 	void DataTransformer<Dtype>::Transform(const cv::Mat& img, Blob<Dtype>* transformed_blob)
 	{
@@ -322,7 +322,7 @@ void DataTransformer<Dtype>::Transform(const vector<cv::Mat> & mat_vector,
 		const Dtype scale = param_.scale();
 		const bool has_mean_file = param_.has_mean_file();
 		const bool has_mean_values = mean_values_.size() > 0;
-		/* Begin Added by liugan5, for data augmentation, 2017.11.22 */
+		/* Begin Added by garylau, for data augmentation, 2017.11.22 */
 		const float apply_prob = 1.f - param_.apply_probability();
 		const float max_smooth = param_.max_smooth();
 		const int rotation_angle = param_.max_rotation_angle();
@@ -452,7 +452,7 @@ void DataTransformer<Dtype>::Transform(const vector<cv::Mat> & mat_vector,
 				break;
 			}
 		}
-		/* End Added by liugan5, for data augmentation, 2017.11.22 */
+		/* End Added by garylau, for data augmentation, 2017.11.22 */
 
 		const int img_channels = cv_img.channels();
 		const int img_height = cv_img.rows;
@@ -485,7 +485,7 @@ void DataTransformer<Dtype>::Transform(const vector<cv::Mat> & mat_vector,
     }
   }
 
-  /* Begin Added by liugan5, for data augmentation, 2017.11.22 */
+  /* Begin Added by garylau, for data augmentation, 2017.11.22 */
   // resizing and crop according to min side, preserving aspect ratio
   if (do_resize_to_min_side)
   {
@@ -564,17 +564,17 @@ void DataTransformer<Dtype>::Transform(const vector<cv::Mat> & mat_vector,
 		  LOG(INFO) << "erase_rect: " << "x:" << erase_rect.x << ", y:" << erase_rect.y << ", width:" << erase_rect.width << ", height:" << erase_rect.height;
 	  }
   }
-  /* End Added by liugan5, for data augmentation, 2017.11.22 */
+  /* End Added by garylau, for data augmentation, 2017.11.22 */
 
   int h_off = 0;
   int w_off = 0;
   cv::Mat cv_cropped_img = cv_img;
-  /* Begin Added by liugan5, for data augmentation, 2017.11.22 */
+  /* Begin Added by garylau, for data augmentation, 2017.11.22 */
   if (img_width != cv_cropped_img.cols || img_height != cv_cropped_img.rows)
   {
 	  cv::resize(cv_cropped_img, cv_cropped_img, cv::Size(img_width, img_height));
   }
-  /* End Added by liugan5, for data augmentation, 2017.11.22 */
+  /* End Added by garylau, for data augmentation, 2017.11.22 */
   if (crop_size) {
     CHECK_EQ(crop_size, height);
     CHECK_EQ(crop_size, width);
@@ -844,7 +844,7 @@ int DataTransformer<Dtype>::Rand(int n) {
 
 INSTANTIATE_CLASS(DataTransformer);
 
-/* Begin Added by liugan5, for lmdb data augmentation, 2017.12.11 */
+/* Begin Added by garylau, for lmdb data augmentation, 2017.12.11 */
 template<typename Dtype>
 void DataTransformer<Dtype>::DatumToMat(const Datum* datum, cv::Mat& cv_img)
 {
@@ -1117,6 +1117,6 @@ void DataTransformer<Dtype>::CVMatTransform(cv::Mat& in_out_cv_img)
 	}
 	in_out_cv_img = cv_img;
 }
-/* End Added by liugan5, for lmdb data augmentation, 2017.12.11 */
+/* End Added by garylau, for lmdb data augmentation, 2017.12.11 */
 
 }  // namespace caffe
