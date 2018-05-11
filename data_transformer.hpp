@@ -142,21 +142,21 @@ class DataTransformer {
   // Tranformation parameters
   TransformationParameter param_;
 
-  /* Begin Added by liugan5, for data augmentation, 2017.11.29 */
+  /* Begin Added by garylau, for data augmentation, 2017.11.29 */
   void random_crop(cv::Mat& cv_img, int crop_size);
-  /* End Added by liugan5, for data augmentation, 2017.11.29 */
+  /* End Added by garylau, for data augmentation, 2017.11.29 */
 
   shared_ptr<Caffe::RNG> rng_;
   Phase phase_;
   Blob<Dtype> data_mean_;
   vector<Dtype> mean_values_;
 
-  /* Begin Added by liugan5, for lmdb data augmentation, 2017.12.11 */
+  /* Begin Added by garylau, for lmdb data augmentation, 2017.12.11 */
  public:
   void DatumToMat(const Datum* datum, cv::Mat& cv_img);
   void MatToDatum(const cv::Mat& cv_img, Datum* datum);
   void CVMatTransform(cv::Mat& cv_img);
-  /* End Added by liugan5, for lmdb data augmentation, 2017.12.11 */
+  /* End Added by garylau, for lmdb data augmentation, 2017.12.11 */
 };
 
 }  // namespace caffe
