@@ -9,7 +9,7 @@
     #force_color: false                             #6 强制为彩色图
     #force_gray: false                              #7 强制为灰度图
 
-    # Begin Added by liugan5 for Image augmentation
+    # Begin Added by garylau for Image augmentation
     apply_probability: 0.5                          #8 是否做smooth、brightness、color_shift是概率性事件
     smooth_filtering: true                          #9 是否模糊处理                                             （随机）
     max_smooth: 6                                   #10 模糊处理参数                                            （随机）
@@ -28,5 +28,5 @@
     random_erasing_high: 0.2                        #23 随机擦除概率最大值                                      （随机）
     random_erasing_ratio: 0.3                       #24 用来确定随机擦除面积的比例的参数                         （随机）
     debug_params: false                             #22 调试看数据增加是否正确时用
-    # End Added by liugan5 for Image augmentation
+    # End Added by garylau for Image augmentation
   }
